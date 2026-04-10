@@ -58,6 +58,12 @@ import androidx.compose.ui.unit.dp
 import com.example.superheroes.model.Hero
 import com.example.superheroes.model.HeroesRepository
 import com.example.superheroes.ui.theme.SuperheroesTheme
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -110,6 +116,9 @@ fun HeroListItem(
     modifier: Modifier = Modifier
 ) {
     Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         modifier = modifier,
     ) {
@@ -172,7 +181,35 @@ fun HeroesPreview() {
             In later units you will learn how to use ViewModel in such scenarios that takes the
             data source as a dependency and exposes heroes.
             */
-            HeroesList(heroes = HeroesRepository.heroes)
+            HeroesButton(heroes = HeroesRepository.heroes)
         }
+    }
+}
+
+@Composable
+fun HeroesButton(
+    heroes: List<Hero>,
+    modifier: Modifier = Modifier
+) {
+    var b by remember { mutableStateOf(false) }
+
+    val reversa = if (b) heroes.reversed() else heroes
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+
+        Button(
+            onClick = { b = !b } //Aqui se realiza el invertido de la lista
+        ) {
+            Text("Quieres invertir este orden? DALE CLICK")
+        }
+
+        HeroesList(
+            heroes = reversa
+        )
     }
 }
